@@ -1,0 +1,85 @@
+---
+title: "Developing Data Products Course Project"
+author: "Denise Wong"
+date: "1 October 2018"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+The purpose of this assignment was to build a web app using Shiny.  
+
+
+Data for this project was sourced from Kaggle  
+https://www.kaggle.com/koki25ando/tabelog-restaurant-review-dataset 
+
+
+My app allows you to find the restaurants around your closest train station based on a maximum price limit. 
+
+
+
+The materials can be found in:  
+Web app: https://denisewong1.shinyapps.io/myshinyapp/  
+GitHub Repo: https://github.com/denisewong1/ShinyApp   
+
+
+## ui.R
+
+There are two inputs expected from the user - the station name and the maximum price range - via a drop down box and a slider.  
+
+
+```{r, eval=FALSE}
+  sidebarLayout(
+    sidebarPanel(
+        selectInput("station", "Nearest Station:", 
+            choices=idStation),
+        hr(),
+        helpText(" "),
+        hr(),
+        sliderInput("slider1", "Max Price", 2000, 5000, 4000),
+        hr()
+    )
+```
+
+
+
+## server.R
+
+This code snippet evaluates the subset of restaurants which are closest to the station selected 'station' and below the maximum price range 'slider' from the inputs in the ui.R code.  
+
+The subsetted data is displayed as leaflet map.  
+
+```{r, eval=FALSE}
+data <- reactive({
+    x <- subset(df, Station==input$station & PriceHigh < input$slider1)
+})
+```
+
+
+This code snippet calculates the number of restaurants in the area based on the selection criteria and outputs the message to the main plot panel.    
+
+```{r, eval=FALSE}
+nMsg <- paste("Restaurants in your price range : ",NROW(dfRest),sep="")
+output$message1 <- renderText({
+    nMsg
+})
+```
+
+
+## Try it now!  
+
+
+Web app: https://denisewong1.shinyapps.io/myshinyapp/  
+
+
+
+GitHub Repo: https://github.com/denisewong1/ShinyApp  
+
+
+
+
+
